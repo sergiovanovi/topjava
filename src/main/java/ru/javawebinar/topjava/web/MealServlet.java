@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
+import ru.javawebinar.topjava.dao.MealDAOImpl;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -15,6 +16,7 @@ public class MealServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.debug("redirect to meals");
-        response.sendRedirect("meals.jsp");
+        request.setAttribute("list", new MealDAOImpl().list());
+        request.getRequestDispatcher("/meals.jsp").forward(request, response);
     }
 }
