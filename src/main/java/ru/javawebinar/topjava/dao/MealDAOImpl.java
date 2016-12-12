@@ -7,17 +7,21 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class MealDAOImpl implements MealDAO {
-    private List<Meal> list = Arrays.asList(
+    private static final int MAX_CCAL_PER_DAY = 2000;
+
+    private List<Meal> list = Collections.synchronizedList(new ArrayList(Arrays.asList(
             new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
             new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
             new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
             new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
             new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510))));
 
     @Override
     public void add(Meal meal) {
@@ -43,6 +47,6 @@ public class MealDAOImpl implements MealDAO {
 
     @Override
     public List<MealWithExceed> list() {
-        return MealsUtil.getFilteredWithExceeded(list, LocalTime.of(0, 0), LocalTime.of(23, 0), 2000);
+        return MealsUtil.getFilteredWithExceeded(list, LocalTime.MIN, LocalTime.MAX, MAX_CCAL_PER_DAY);
     }
 }
