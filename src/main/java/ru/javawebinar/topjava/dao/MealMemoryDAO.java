@@ -5,15 +5,11 @@ import ru.javawebinar.topjava.model.MealWithExceed;
 
 import java.util.List;
 
-public interface MealDAO {
+public interface MealMemoryDAO {
 
-    public void add(Meal meal);
+    public void remove(int id);
 
-    public void remove(Meal meal);
-
-    public void set(Meal meal);
-
-    public int getId(Meal meal);
+    public void put(int id, Meal meal);
 
     public List<MealWithExceed> list();
 }
