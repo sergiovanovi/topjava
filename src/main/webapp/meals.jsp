@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <title>Meal list</title>
@@ -28,10 +29,13 @@
         <th width="50">Edit</th>
     </tr>
     <c:forEach items="${list}" var="meal">
+        <fmt:parseDate value="${meal.dateTime}" type="both" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDate"/>
+        <fmt:formatDate value="${parsedDate}" type="both" pattern="dd.MM.yyyy HH:mm" var="stdDatum"/>
+
         <c:if test="${meal.exceed}">
             <tr bgcolor="#f08080">
                 <td width="50"><c:out value="${meal.id}"/></td>
-                <td width="200"><c:out value="${meal.dateTime}"/></td>
+                <td width="200"><c:out value="${stdDatum}"/></td>
                 <td width="200"><c:out value="${meal.description}"/></td>
                 <td width="100"><c:out value="${meal.calories}"/></td>
                 <td><a href="<c:url value="?action=remove&id=${meal.id}" />">Remove</a></td>
@@ -41,7 +45,7 @@
         <c:if test="${!meal.exceed}">
             <tr bgcolor="#90ee90">
                 <td width="50"><c:out value="${meal.id}"/></td>
-                <td width="200"><c:out value="${meal.dateTime}"/></td>
+                <td width="200"><c:out value="${stdDatum}"/></td>
                 <td width="200"><c:out value="${meal.description}"/></td>
                 <td width="100"><c:out value="${meal.calories}"/></td>
                 <td><a href="<c:url value="?action=remove&id=${meal.id}" />">Remove</a></td>

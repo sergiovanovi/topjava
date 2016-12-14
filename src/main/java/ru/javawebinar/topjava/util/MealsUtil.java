@@ -6,7 +6,6 @@ import ru.javawebinar.topjava.model.MealWithExceed;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -45,10 +44,5 @@ public class MealsUtil {
 
     public static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
         return new MealWithExceed(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded);
-    }
-
-    private static AtomicInteger id = new AtomicInteger(0);
-    public static int getId(){
-        return id.getAndIncrement();
     }
 }

@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.dao;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.MyUtil;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -12,23 +13,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class MealMemoryDAOImpl implements MealMemoryDAO {
-
     private static final int MAX_CCAL_PER_DAY = 2000;
-
     public static ConcurrentHashMap<Integer, Meal> hardMap = new ConcurrentHashMap<>();
-
     static {
-        int id = MealsUtil.getId();
+        int id = MyUtil.getId();
         hardMap.put(id, new Meal(id, LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
-        id = MealsUtil.getId();
+        id = MyUtil.getId();
         hardMap.put(id, new Meal(id, LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000));
-        id = MealsUtil.getId();
+        id = MyUtil.getId();
         hardMap.put(id, new Meal(id, LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500));
-        id = MealsUtil.getId();
+        id = MyUtil.getId();
         hardMap.put(id, new Meal(id, LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000));
-        id = MealsUtil.getId();
+        id = MyUtil.getId();
         hardMap.put(id, new Meal(id, LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500));
-        id = MealsUtil.getId();
+        id = MyUtil.getId();
         hardMap.put(id, new Meal(id, LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
     }
 
