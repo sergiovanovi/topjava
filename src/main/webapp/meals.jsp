@@ -34,16 +34,10 @@
 
         <c:if test="${meal.exceed}">
             <tr bgcolor="#f08080">
-                <td width="50"><c:out value="${meal.id}"/></td>
-                <td width="200"><c:out value="${stdDatum}"/></td>
-                <td width="200"><c:out value="${meal.description}"/></td>
-                <td width="100"><c:out value="${meal.calories}"/></td>
-                <td><a href="<c:url value="?action=remove&id=${meal.id}" />">Remove</a></td>
-                <td><a href="<c:url value="?action=update&id=${meal.id}" />">Edit</a></td>
-            </tr>
         </c:if>
         <c:if test="${!meal.exceed}">
             <tr bgcolor="#90ee90">
+        </c:if>
                 <td width="50"><c:out value="${meal.id}"/></td>
                 <td width="200"><c:out value="${stdDatum}"/></td>
                 <td width="200"><c:out value="${meal.description}"/></td>
@@ -51,7 +45,6 @@
                 <td><a href="<c:url value="?action=remove&id=${meal.id}" />">Remove</a></td>
                 <td><a href="<c:url value="?action=update&id=${meal.id}" />">Edit</a></td>
             </tr>
-        </c:if>
     </c:forEach>
 </table>
 </body>

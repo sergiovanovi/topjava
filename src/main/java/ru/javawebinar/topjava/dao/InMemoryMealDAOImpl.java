@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class MealMemoryDAOImpl implements MealMemoryDAO {
+public class InMemoryMealDAOImpl implements InMemoryMealDAO {
     private static final int MAX_CCAL_PER_DAY = 2000;
     public static ConcurrentHashMap<Integer, Meal> hardMap = new ConcurrentHashMap<>();
     static {

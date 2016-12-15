@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
  * 31.05.2015.
  */
 public class MealsUtil {
-
     public static List<MealWithExceed> getFilteredWithExceeded(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
 
         Map<LocalDate, Integer> caloriesSumByDate = meals.stream()

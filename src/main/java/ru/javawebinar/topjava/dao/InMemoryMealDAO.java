@@ -5,7 +5,7 @@ import ru.javawebinar.topjava.model.MealWithExceed;
 
 import java.util.List;
 
-public interface MealMemoryDAO {
+public interface InMemoryMealDAO {
 
     public void remove(int id);
 
