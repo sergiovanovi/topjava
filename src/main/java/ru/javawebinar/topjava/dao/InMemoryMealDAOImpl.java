@@ -3,7 +3,7 @@ package ru.javawebinar.topjava.dao;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.web.MyUtil;
+import ru.javawebinar.topjava.util.MyUtil;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;

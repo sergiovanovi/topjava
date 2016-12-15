@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.web;
+package ru.javawebinar.topjava.util;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

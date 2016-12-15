@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import ru.javawebinar.topjava.dao.InMemoryMealDAO;
 import ru.javawebinar.topjava.dao.InMemoryMealDAOImpl;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.util.MyUtil;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
