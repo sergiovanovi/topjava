@@ -27,7 +27,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
         return repository.remove(repository.stream()
                 .filter(u -> u.getId() == id)
                 .findFirst()
-                .get());
+                .orElse(null));
     }
 
     @Override
@@ -57,6 +57,6 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
         return repository.stream()
                 .filter(u -> u.getEmail().equalsIgnoreCase(email))
                 .findFirst()
-                .get();
+                .orElse(null);
     }
 }
