@@ -54,19 +54,19 @@ public class MealServlet extends HttpServlet {
         if (action == null) {
             LOG.info("getAll");
             request.setAttribute("meals",
-                    MealsUtil.getWithExceeded(mealRestController.getAll(), AuthorizedUser.getCaloriesPerDay()));
+                    MealsUtil.getWithExceeded(mealRestController.getAll(AuthorizedUser.id()), AuthorizedUser.getCaloriesPerDay()));
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
 
         } else if ("delete".equals(action)) {
             int id = getId(request);
             LOG.info("Delete {}", id);
-            mealRestController.delete(id);
+            mealRestController.delete(id, AuthorizedUser.id());
             response.sendRedirect("meals");
 
         } else if ("create".equals(action) || "update".equals(action)) {
             final Meal meal = action.equals("create") ?
                     new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000, AuthorizedUser.id()) :
-                    mealRestController.get(getId(request));
+                    mealRestController.get(getId(request), AuthorizedUser.id());
             request.setAttribute("meal", meal);
             request.getRequestDispatcher("meal.jsp").forward(request, response);
         }

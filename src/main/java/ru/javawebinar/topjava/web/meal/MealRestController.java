@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 
@@ -22,21 +23,22 @@ public class MealRestController {
 
     public Meal save(Meal meal){
         LOG.info("save " + meal);
+        meal.setId(AuthorizedUser.id());
         return service.save(meal);
     }
 
-    public void delete(int id){
+    public void delete(int id, int userId){
         LOG.info("delete " + id);
-        service.delete(id);
+        service.delete(id, userId);
     }
 
-    public Meal get(int id){
+    public Meal get(int id, int userId){
         LOG.info("get " + id);
-        return service.get(id);
+        return service.get(id, userId);
     }
 
-    public List<Meal> getAll(){
+    public List<Meal> getAll(int userId){
         LOG.info("getAll");
-        return service.getAll();
+        return service.getAll(userId);
     }
 }
