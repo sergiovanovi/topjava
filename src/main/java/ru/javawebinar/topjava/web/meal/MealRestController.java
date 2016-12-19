@@ -23,7 +23,7 @@ public class MealRestController {
 
     public Meal save(Meal meal){
         LOG.info("save " + meal);
-        meal.setId(AuthorizedUser.id());
+        meal.setId(AuthorizedUser.getId());
         return service.save(meal);
     }
 

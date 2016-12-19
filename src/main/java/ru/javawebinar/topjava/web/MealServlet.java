@@ -39,7 +39,7 @@ public class MealServlet extends HttpServlet {
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.valueOf(request.getParameter("calories")),
-                AuthorizedUser.id());
+                AuthorizedUser.getId());
 
         LOG.info(meal.isNew() ? "Create {}" : "Update {}", meal);
         mealRestController.save(meal);
@@ -54,19 +54,19 @@ public class MealServlet extends HttpServlet {
         if (action == null) {
             LOG.info("getAll");
             request.setAttribute("meals",
-                    MealsUtil.getWithExceeded(mealRestController.getAll(AuthorizedUser.id()), AuthorizedUser.getCaloriesPerDay()));
+                    MealsUtil.getWithExceeded(mealRestController.getAll(AuthorizedUser.getId()), AuthorizedUser.getCaloriesPerDay()));
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
 
         } else if ("delete".equals(action)) {
             int id = getId(request);
             LOG.info("Delete {}", id);
-            mealRestController.delete(id, AuthorizedUser.id());
+            mealRestController.delete(id, AuthorizedUser.getId());
             response.sendRedirect("meals");
 
         } else if ("create".equals(action) || "update".equals(action)) {
             final Meal meal = action.equals("create") ?
-                    new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000, AuthorizedUser.id()) :
-                    mealRestController.get(getId(request), AuthorizedUser.id());
+                    new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000, AuthorizedUser.getId()) :
+                    mealRestController.get(getId(request), AuthorizedUser.getId());
             request.setAttribute("meal", meal);
             request.getRequestDispatcher("meal.jsp").forward(request, response);
         }

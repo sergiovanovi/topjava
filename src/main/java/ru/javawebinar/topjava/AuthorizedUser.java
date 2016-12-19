@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 /**
@@ -7,9 +9,17 @@ import ru.javawebinar.topjava.util.MealsUtil;
  * 06.03.2015.
  */
 public class AuthorizedUser {
+    private static final Logger LOG = LoggerFactory.getLogger(AuthorizedUser.class);
 
-    public static int id() {
-        return 1;
+    private static int id = 1;
+
+    public static int getId(){
+        return id;
+    }
+
+    public static void setId(int userId){
+        id = userId;
+        LOG.info("Logged as " + id);
     }
 
     public static int getCaloriesPerDay() {

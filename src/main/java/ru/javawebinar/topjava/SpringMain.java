@@ -24,8 +24,8 @@ public class SpringMain {
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
             adminUserController.create(new User(1, "userName", "email", "password", Role.ROLE_ADMIN));
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-            mealRestController.save(new Meal(LocalDateTime.now(), "Jopa", 2000, AuthorizedUser.id()));
-            System.out.println(mealRestController.getAll(AuthorizedUser.id()));
+            mealRestController.save(new Meal(LocalDateTime.now(), "Jopa", 2000, AuthorizedUser.getId()));
+            System.out.println(mealRestController.getAll(AuthorizedUser.getId()));
             InMemoryUserRepositoryImpl inMemoryUserRepository = appCtx.getBean(InMemoryUserRepositoryImpl.class);
             inMemoryUserRepository.getAll().forEach(System.out::println);
             System.out.println(adminUserController.get(1));
