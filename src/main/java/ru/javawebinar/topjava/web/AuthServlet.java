@@ -21,6 +21,7 @@ public class AuthServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         AuthorizedUser.setId(Integer.parseInt(req.getParameter("userId")));
         resp.sendRedirect("index");
     }

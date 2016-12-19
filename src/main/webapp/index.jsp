@@ -9,9 +9,15 @@
 <h3>Проект <a href="https://github.com/JavaWebinar/topjava09" target="_blank">Java Enterprise (Topjava)</a></h3>
 <hr>
 
+<c:if test="${empty id}">
+    <tr>Choose user</tr>
+</c:if>
+<c:if test="${!empty id}">
+    <tr>Current user ${id}</tr>
+</c:if>
+
 <form method="post" action="index">
     <select name="userId">
-        <option>Current user ${id}</option>
         <option>1</option>
         <option>2</option>
     </select>

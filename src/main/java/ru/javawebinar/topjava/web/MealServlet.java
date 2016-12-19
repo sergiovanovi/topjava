@@ -28,7 +28,13 @@ import java.util.Objects;
 public class MealServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(MealServlet.class);
 
-    private MealRestController mealRestController = new ClassPathXmlApplicationContext("spring/spring-app.xml").getBean(MealRestController.class);
+    private MealRestController mealRestController;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        mealRestController = new ClassPathXmlApplicationContext("spring/spring-app.xml").getBean(MealRestController.class);
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
