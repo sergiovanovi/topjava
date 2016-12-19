@@ -28,12 +28,20 @@ import java.util.Objects;
 public class MealServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(MealServlet.class);
 
+    private ClassPathXmlApplicationContext applicationContext;
     private MealRestController mealRestController;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        mealRestController = new ClassPathXmlApplicationContext("spring/spring-app.xml").getBean(MealRestController.class);
+        applicationContext = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        mealRestController = applicationContext.getBean(MealRestController.class);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        applicationContext.close();
     }
 
     @Override
