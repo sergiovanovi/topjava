@@ -17,9 +17,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * User: gkislin
@@ -49,15 +52,38 @@ public class MealServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
 
-        Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
-                LocalDateTime.parse(request.getParameter("dateTime")),
-                request.getParameter("description"),
-                Integer.valueOf(request.getParameter("calories")),
-                AuthorizedUser.getId());
+        if (request.getParameter("dateTime") != null) {
+            Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
+                    LocalDateTime.parse(request.getParameter("dateTime")),
+                    request.getParameter("description"),
+                    Integer.valueOf(request.getParameter("calories")),
+                    AuthorizedUser.getId());
 
-        LOG.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-        mealRestController.save(meal);
-        response.sendRedirect("meals");
+            LOG.info(meal.isNew() ? "Create {}" : "Update {}", meal);
+            mealRestController.save(meal);
+            response.sendRedirect("meals");
+        } else {
+            String fromTime = request.getParameter("fromTime");
+            String toTime = request.getParameter("toTime");
+            String fromDate = request.getParameter("fromDate");
+            String toDate = request.getParameter("toDate");
+
+            LocalTime startTime = LocalTime.parse(fromTime.isEmpty() ? LocalTime.MIN.toString() : fromTime);
+            LocalTime endTime = LocalTime.parse(toTime.isEmpty() ? LocalTime.MAX.toString() : toTime);
+            LocalDate startDate = LocalDate.parse(fromDate.isEmpty() ? LocalDate.MIN.toString() : fromDate);
+            LocalDate endDate = LocalDate.parse(toDate.isEmpty() ? LocalDate.MAX.toString() : toDate);
+
+            request.setAttribute("startTime", request.getParameter("fromTime"));
+            request.setAttribute("endTime", request.getParameter("toTime"));
+            request.setAttribute("startDate", request.getParameter("fromDate"));
+            request.setAttribute("endDate", request.getParameter("toDate"));
+
+            request.setAttribute("meals",
+                    MealsUtil.getFilteredWithExceeded(mealRestController.getAll(AuthorizedUser.getId()).stream()
+                            .filter(m -> m.getDate().isAfter(startDate) && m.getDate().isBefore(endDate))
+                            .collect(Collectors.toList()), startTime, endTime, AuthorizedUser.getCaloriesPerDay()));
+            request.getRequestDispatcher("/meals.jsp").forward(request, response);
+        }
     }
 
     @Override
