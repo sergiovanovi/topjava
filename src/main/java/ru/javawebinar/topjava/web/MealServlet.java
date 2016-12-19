@@ -80,7 +80,8 @@ public class MealServlet extends HttpServlet {
 
             request.setAttribute("meals",
                     MealsUtil.getFilteredWithExceeded(mealRestController.getAll(AuthorizedUser.getId()).stream()
-                            .filter(m -> m.getDate().isAfter(startDate) && m.getDate().isBefore(endDate))
+                            .filter(m -> (m.getDate().isAfter(startDate) || m.getDate().isEqual(startDate))
+                                    && (m.getDate().isBefore(endDate) || m.getDate().isEqual(endDate)))
                             .collect(Collectors.toList()), startTime, endTime, AuthorizedUser.getCaloriesPerDay()));
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
         }
