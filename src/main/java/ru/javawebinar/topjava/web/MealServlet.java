@@ -50,9 +50,9 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String id = request.getParameter("id");
 
         if (request.getParameter("dateTime") != null) {
+            String id = request.getParameter("id");
             Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                     LocalDateTime.parse(request.getParameter("dateTime")),
                     request.getParameter("description"),
@@ -73,10 +73,10 @@ public class MealServlet extends HttpServlet {
             LocalDate startDate = LocalDate.parse(fromDate.isEmpty() ? LocalDate.MIN.toString() : fromDate);
             LocalDate endDate = LocalDate.parse(toDate.isEmpty() ? LocalDate.MAX.toString() : toDate);
 
-            request.setAttribute("startTime", request.getParameter("fromTime"));
-            request.setAttribute("endTime", request.getParameter("toTime"));
-            request.setAttribute("startDate", request.getParameter("fromDate"));
-            request.setAttribute("endDate", request.getParameter("toDate"));
+            request.setAttribute("startTime", fromTime);
+            request.setAttribute("endTime", toTime);
+            request.setAttribute("startDate", fromDate);
+            request.setAttribute("endDate", toDate);
 
             request.setAttribute("meals",
                     MealsUtil.getFilteredWithExceeded(mealRestController.getAll(AuthorizedUser.getId()).stream()
