@@ -11,7 +11,8 @@ import java.time.LocalTime;
  */
 @NamedQueries({
         @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.user.id=:userId AND m.id=:id"),
-        @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime")
+        @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime"),
+        @NamedQuery(name = Meal.BETWEEN_SORTED, query = "SELECT m FROM Meal  m WHERE m.user.id=:userId  AND m.dateTime BETWEEN :start AND :stop ORDER BY m.dateTime")
 })
 @Entity
 @Table(name = "meals")
@@ -19,6 +20,7 @@ public class Meal extends BaseEntity {
 
     public static final String DELETE = "Meal.delete";
     public static final String ALL_SORTED = "Meal.getAllSorted";
+    public static final String BETWEEN_SORTED = "Meal.getBetweenSorted";
 
     @Column(name = "date_time", columnDefinition = "timestamp default now()")
     private LocalDateTime dateTime;
