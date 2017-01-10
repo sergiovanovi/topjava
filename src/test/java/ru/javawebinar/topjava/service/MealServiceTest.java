@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.service;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.Stopwatch;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,6 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 public class MealServiceTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MealServiceTest.class);
-    private long startTime;
     private String methodName = "";
     private static Map<String, Long> resultRuntimeMethodMap = new ConcurrentHashMap<>();
 
@@ -46,14 +46,17 @@ public class MealServiceTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    @Before
-    public void beforeTest() {
-        startTime = System.nanoTime();
-    }
+    @Rule
+    public Stopwatch stopwatch = new Stopwatch() {
+        @Override
+        protected void succeeded(long nanos, Description description) {
+            super.succeeded(nanos, description);
+        }
+    };
 
     @After
     public void afterTest() {
-        long runTime = (System.nanoTime() - startTime) / 1000000L;
+        long runTime = stopwatch.runtime(TimeUnit.MILLISECONDS);
         LOG.info(methodName + " runtime is {} ms", runTime);
         resultRuntimeMethodMap.put(methodName, runTime);
     }
