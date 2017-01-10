@@ -1,9 +1,11 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.Stopwatch;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -15,6 +17,11 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
@@ -28,26 +35,51 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MealServiceTest.class);
+    private long startTime;
+    private String methodName = "";
+    private static Map<String, Long> resultRuntimeMethodMap = new ConcurrentHashMap<>();
+
     @Autowired
     private MealService service;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
+    @Before
+    public void beforeTest() {
+        startTime = System.nanoTime();
+    }
+
+    @After
+    public void afterTest() {
+        long runTime = (System.nanoTime() - startTime) / 1000000L;
+        LOG.info(methodName + " runtime is {} ms", runTime);
+        resultRuntimeMethodMap.put(methodName, runTime);
+    }
+
+    @AfterClass
+    public static void afterClassTest() {
+        resultRuntimeMethodMap.forEach((k, v) -> LOG.info(k + " runtime is {} ms", v));
+    }
+
     @Test
     public void testDelete() throws Exception {
+        methodName = new Object(){}.getClass().getEnclosingMethod().getName();
         service.delete(MEAL1_ID, USER_ID);
         MATCHER.assertCollectionEquals(Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2), service.getAll(USER_ID));
     }
 
     @Test
     public void testDeleteNotFound() throws Exception {
+        methodName = new Object(){}.getClass().getEnclosingMethod().getName();
         thrown.expect(NotFoundException.class);
         service.delete(MEAL1_ID, 1);
     }
 
     @Test
     public void testSave() throws Exception {
+        methodName = new Object(){}.getClass().getEnclosingMethod().getName();
         Meal created = getCreated();
         service.save(created, USER_ID);
         MATCHER.assertCollectionEquals(Arrays.asList(created, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1), service.getAll(USER_ID));
@@ -55,18 +87,21 @@ public class MealServiceTest {
 
     @Test
     public void testGet() throws Exception {
+        methodName = new Object(){}.getClass().getEnclosingMethod().getName();
         Meal actual = service.get(ADMIN_MEAL_ID, ADMIN_ID);
         MATCHER.assertEquals(ADMIN_MEAL1, actual);
     }
 
     @Test
     public void testGetNotFound() throws Exception {
+        methodName = new Object(){}.getClass().getEnclosingMethod().getName();
         thrown.expect(NotFoundException.class);
         service.get(MEAL1_ID, ADMIN_ID);
     }
 
     @Test
     public void testUpdate() throws Exception {
+        methodName = new Object(){}.getClass().getEnclosingMethod().getName();
         Meal updated = getUpdated();
         service.update(updated, USER_ID);
         MATCHER.assertEquals(updated, service.get(MEAL1_ID, USER_ID));
@@ -74,17 +109,20 @@ public class MealServiceTest {
 
     @Test
     public void testUpdateNotFound() throws Exception {
+        methodName = new Object(){}.getClass().getEnclosingMethod().getName();
         thrown.expect(NotFoundException.class);
         service.update(MEAL1, ADMIN_ID);
     }
 
     @Test
     public void testGetAll() throws Exception {
+        methodName = new Object(){}.getClass().getEnclosingMethod().getName();
         MATCHER.assertCollectionEquals(MEALS, service.getAll(USER_ID));
     }
 
     @Test
     public void testGetBetween() throws Exception {
+        methodName = new Object(){}.getClass().getEnclosingMethod().getName();
         MATCHER.assertCollectionEquals(Arrays.asList(MEAL3, MEAL2, MEAL1),
                 service.getBetweenDates(LocalDate.of(2015, Month.MAY, 30), LocalDate.of(2015, Month.MAY, 30), USER_ID));
     }
