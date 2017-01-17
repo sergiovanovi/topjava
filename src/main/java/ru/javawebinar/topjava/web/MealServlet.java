@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
@@ -27,13 +29,17 @@ import java.util.Objects;
 public class MealServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(MealServlet.class);
 
-    private ConfigurableApplicationContext springContext;
+    private GenericXmlApplicationContext springContext;
     private MealRestController mealController;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
+        springContext = new GenericXmlApplicationContext();
+        ConfigurableEnvironment environment = springContext.getEnvironment();
+        environment.setActiveProfiles("postgres", "datajpa");
+        springContext.load("spring/spring-app.xml", "spring/spring-db.xml");
+        springContext.refresh();
         mealController = springContext.getBean(MealRestController.class);
     }
 
