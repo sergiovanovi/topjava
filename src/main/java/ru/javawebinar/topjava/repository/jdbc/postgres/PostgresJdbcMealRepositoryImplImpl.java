@@ -10,11 +10,6 @@ import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * User: gkislin
- * Date: 26.08.2014
- */
-
 @Repository
 @Profile("postgres")
 public class PostgresJdbcMealRepositoryImplImpl extends JdbcMealRepositoryImpl {
