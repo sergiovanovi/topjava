@@ -9,7 +9,6 @@ import ru.javawebinar.topjava.repository.jdbc.JdbcMealRepositoryImpl;
 import javax.sql.DataSource;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.temporal.Temporal;
 import java.util.Collection;
 
 @Repository
