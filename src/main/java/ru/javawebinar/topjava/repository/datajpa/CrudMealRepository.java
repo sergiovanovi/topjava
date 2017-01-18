@@ -23,17 +23,14 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Transactional
     Meal save(Meal meal);
 
-    @Override
-    Meal saveAndFlush(Meal meal);
-
     @Transactional
     @Modifying
     @Query("DELETE FROM Meal m WHERE m.id=:id AND m.user.id=:userId")
     int delete(@Param("id") int id, @Param("userId") int userId);
 
-    @Override
-    Meal findOne(Integer integer);
+    Meal findOneByIdAndUserId(Integer id, Integer userId);
 
-    @Override
-    List<Meal> findAll(Sort sort);
+    List<Meal> findAllByUserId(Sort sort, Integer userId);
+
+    List<Meal> findAllByUserIdAndDateTimeIsBetween(Sort sort, Integer userId, LocalDateTime from, LocalDateTime to);
 }
