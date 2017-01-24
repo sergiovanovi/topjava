@@ -9,7 +9,10 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.MealsUtil;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Collection;
 
 @Controller
 public class MealController {
@@ -20,6 +23,20 @@ public class MealController {
     @RequestMapping(value = "/meals", method = RequestMethod.GET)
     public String users(Model model) {
         model.addAttribute("meals", MealsUtil.getWithExceeded(service.getAll(AuthorizedUser.id()), AuthorizedUser.getCaloriesPerDay()));
+        return "meals";
+    }
+
+    @RequestMapping(value = "/meals", method = RequestMethod.POST)
+    public String filter(Model model, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
+                         @RequestParam("startTime") String startTime, @RequestParam("endTime") String endTime) {
+        LocalDateTime startDateTime = LocalDateTime.of(startDate.equals("") ? LocalDate.of(2000, 1, 1) : LocalDate.parse(startDate)
+                , startTime.equals("") ? LocalTime.MIN : LocalTime.parse(startTime));
+        LocalDateTime endDateTime = LocalDateTime.of(endDate.equals("") ? LocalDate.of(3000, 1, 1) : LocalDate.parse(endDate)
+                , endTime.equals("") ? LocalTime.MAX : LocalTime.parse(endTime));
+
+        Collection<Meal> result = service.getBetweenDateTimes(startDateTime, endDateTime, AuthorizedUser.id());
+
+        model.addAttribute("meals", MealsUtil.getWithExceeded(result, AuthorizedUser.getCaloriesPerDay()));
         return "meals";
     }
 
