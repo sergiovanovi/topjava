@@ -4,15 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: gkislin
@@ -23,6 +31,28 @@ import java.util.List;
 public class JdbcUserRepositoryImpl implements UserRepository {
 
     private static final BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
+    private static final RowMapper<User> ROW_MAPPER_WITH_ROLES = (rs, rowNum) -> {
+        User user = new User();
+        user.setId(rs.getInt("id"));
+        user.setName(rs.getString("name"));
+        user.setEmail(rs.getString("email"));
+        user.setPassword(rs.getString("password"));
+        user.setRegistered(rs.getTimestamp("registered"));
+        user.setEnabled(rs.getBoolean("enabled"));
+        user.setCaloriesPerDay(rs.getInt("calories_per_day"));
+
+        Set<Role> result = new HashSet<>();
+        for (int i = 0; i < rowNum; i++){
+            String role = rs.getString("role");
+            if (role != null && !role.equals("")) {
+                result.add(Role.valueOf(role));
+            }
+        }
+
+        user.setRoles(result);
+
+        return user;
+    };
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -33,8 +63,8 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     private SimpleJdbcInsert insertUser;
 
     @Autowired
-    public JdbcUserRepositoryImpl(DataSource dataSource) {
-        this.insertUser = new SimpleJdbcInsert(dataSource)
+    public JdbcUserRepositoryImpl(DataSourceTransactionManager transactionManager) {
+        this.insertUser = new SimpleJdbcInsert(transactionManager.getDataSource())
                 .withTableName("users")
                 .usingGeneratedKeyColumns("id");
     }
@@ -68,7 +98,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
 
     @Override
     public User get(int id) {
-        List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE id=?", ROW_MAPPER, id);
+        List<User> users = jdbcTemplate.query("SELECT * FROM users LEFT JOIN user_roles ON users.id = user_roles.user_id WHERE id=?", ROW_MAPPER_WITH_ROLES, id);
         return DataAccessUtils.singleResult(users);
     }
 

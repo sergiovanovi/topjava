@@ -30,4 +30,8 @@ public class UserTestData {
 //                            && Objects.equals(expected.getRoles(), actual.getRoles())
                     )
     );
+
+    public static final ModelMatcher<Role> ROLE_MATCHER = new ModelMatcher<>(
+            ((expected, actual) -> actual.toString().equals(expected.toString()))
+    );
 }
