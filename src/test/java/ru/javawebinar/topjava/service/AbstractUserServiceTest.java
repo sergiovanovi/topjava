@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.service;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import ru.javawebinar.topjava.model.Role;
@@ -91,6 +92,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Test
     public void testRoles() {
-        ROLE_MATCHER.assertCollectionEquals(Arrays.asList(Role.ROLE_ADMIN, Role.ROLE_USER), Arrays.asList(Role.ROLE_ADMIN, Role.ROLE_USER));
+        ROLE_MATCHER.assertCollectionEquals(Arrays.asList(Role.ROLE_ADMIN, Role.ROLE_USER), service.get(ADMIN_ID).getRoles());
+        ROLE_MATCHER.assertCollectionEquals(Arrays.asList(Role.ROLE_USER), service.get(USER_ID).getRoles());
     }
 }

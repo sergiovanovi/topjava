@@ -17,15 +17,15 @@
         <input type="hidden" name="id" value="${meal.id}">
         <dl>
             <dt><fmt:message key="meals.date"/>:</dt>
-            <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime"></dd>
+            <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime" required="required"></dd>
         </dl>
         <dl>
             <dt><fmt:message key="meals.desc"/>:</dt>
-            <dd><input type="text" value="${meal.description}" size=40 name="description"></dd>
+            <dd><input type="text" value="${meal.description}" size=40 name="description" required="required"></dd>
         </dl>
         <dl>
             <dt><fmt:message key="meals.cal"/>:</dt>
-            <dd><input type="number" value="${meal.calories}" name="calories"></dd>
+            <dd><input type="number" value="${meal.calories}" name="calories" min="10" max="5000"></dd>
         </dl>
         <button type="submit"><fmt:message key="meals.save"/></button>
         <button onclick="window.history.back()"><fmt:message key="meals.cancel"/></button>

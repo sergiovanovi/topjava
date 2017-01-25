@@ -39,8 +39,8 @@
             <th><fmt:message key="meals.date"/></th>
             <th><fmt:message key="meals.desc"/></th>
             <th><fmt:message key="meals.cal"/></th>
-            <th></th>
-            <th></th>
+            <th><fmt:message key="meals.update"/></th>
+            <th><fmt:message key="meals.delete"/></th>
         </tr>
         </thead>
         <c:forEach items="${meals}" var="meal">

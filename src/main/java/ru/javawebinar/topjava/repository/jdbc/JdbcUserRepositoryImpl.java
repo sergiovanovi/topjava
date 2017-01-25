@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.repository.jdbc;
 
+import javafx.beans.binding.SetBinding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -10,17 +11,14 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
-import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * User: gkislin
@@ -42,13 +40,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
         user.setCaloriesPerDay(rs.getInt("calories_per_day"));
 
         Set<Role> result = new HashSet<>();
-        for (int i = 0; i < rowNum; i++){
-            String role = rs.getString("role");
-            if (role != null && !role.equals("")) {
-                result.add(Role.valueOf(role));
-            }
-        }
-
+        result.add(Role.valueOf(rs.getString("role")));
         user.setRoles(result);
 
         return user;
@@ -99,6 +91,13 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     @Override
     public User get(int id) {
         List<User> users = jdbcTemplate.query("SELECT * FROM users LEFT JOIN user_roles ON users.id = user_roles.user_id WHERE id=?", ROW_MAPPER_WITH_ROLES, id);
+        if (!users.isEmpty()) {
+            User user = users.get(0);
+            Set<Role> roles = new HashSet<>();
+            users.forEach(u -> roles.addAll(u.getRoles()));
+            user.setRoles(roles);
+            return user;
+        }
         return DataAccessUtils.singleResult(users);
     }
 
