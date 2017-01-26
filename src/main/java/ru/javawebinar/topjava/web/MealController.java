@@ -9,6 +9,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.MealsUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -27,10 +28,14 @@ public class MealController {
     }
 
     @RequestMapping(value = "/meals", method = RequestMethod.POST)
-    public String filter(Model model, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
-                         @RequestParam("startTime") String startTime, @RequestParam("endTime") String endTime) {
+    public String filter(HttpServletRequest request, Model model) {
+        String startDate = request.getParameter("startDate");
+        String startTime = request.getParameter("startTime");
         LocalDateTime startDateTime = LocalDateTime.of(startDate.equals("") ? LocalDate.of(2000, 1, 1) : LocalDate.parse(startDate)
                 , startTime.equals("") ? LocalTime.MIN : LocalTime.parse(startTime));
+
+        String endDate = request.getParameter("endDate");
+        String endTime = request.getParameter("endTime");
         LocalDateTime endDateTime = LocalDateTime.of(endDate.equals("") ? LocalDate.of(3000, 1, 1) : LocalDate.parse(endDate)
                 , endTime.equals("") ? LocalTime.MAX : LocalTime.parse(endTime));
 
@@ -41,27 +46,32 @@ public class MealController {
     }
 
     @RequestMapping(value = "/saveAndUpdate", method = RequestMethod.POST)
-    public String saveAndEdit(@RequestParam("id") String id, @RequestParam("dateTime") String dateTime,
-                              @RequestParam("description") String description, @RequestParam("calories") String cal) {
-        if (id.equalsIgnoreCase("")) {
-            Meal meal = new Meal(LocalDateTime.parse(dateTime), description, Integer.valueOf(cal));
+    public String saveAndEdit(HttpServletRequest request) {
+        String idString = request.getParameter("id");
+        if (idString.equals("")) {
+            Meal meal = new Meal(LocalDateTime.parse(request.getParameter("dateTime")),
+                    request.getParameter("description"),
+                    Integer.parseInt(request.getParameter("calories")));
             service.save(meal, AuthorizedUser.id());
         } else {
-            Meal meal = new Meal(Integer.valueOf(id), LocalDateTime.parse(dateTime), description, Integer.valueOf(cal));
+            Meal meal = new Meal(Integer.parseInt(idString),
+                    LocalDateTime.parse(request.getParameter("dateTime")),
+                    request.getParameter("description"),
+                    Integer.parseInt(request.getParameter("calories")));
             service.update(meal, AuthorizedUser.id());
         }
         return "redirect:/meals";
     }
 
-    @RequestMapping(value = "/delete{id}")
-    public String delete(@PathVariable("id") int id) {
-        service.delete(id, AuthorizedUser.id());
+    @RequestMapping(value = "/delete")
+    public String delete(HttpServletRequest request) {
+        service.delete(Integer.parseInt(request.getParameter("id")), AuthorizedUser.id());
         return "redirect:/meals";
     }
 
-    @RequestMapping(value = "/edit{id}")
-    public String edit(@PathVariable("id") int id, Model model) {
-        Meal meal = service.get(id, AuthorizedUser.id());
+    @RequestMapping(value = "/edit")
+    public String edit(HttpServletRequest request, Model model) {
+        Meal meal = service.get(Integer.parseInt(request.getParameter("id")), AuthorizedUser.id());
         model.addAttribute("meal", meal);
         return "meal";
     }
