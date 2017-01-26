@@ -90,7 +90,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Test
     public void testRoles() {
-        ROLE_MATCHER.assertCollectionEquals(Arrays.asList(Role.ROLE_ADMIN, Role.ROLE_USER), service.get(ADMIN_ID).getRoles());
+        ROLE_MATCHER.assertCollectionEquals(Arrays.asList(Role.ROLE_USER, Role.ROLE_ADMIN), service.get(ADMIN_ID).getRoles());
         ROLE_MATCHER.assertCollectionEquals(Arrays.asList(Role.ROLE_USER), service.get(USER_ID).getRoles());
     }
 }
