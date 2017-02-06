@@ -4,9 +4,9 @@
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <a href="meals" class="navbar-brand"><spring:message code="app.title"/></a>
-
         <div class="collapse navbar-collapse">
             <form class="navbar-form navbar-right">
+                <a class="btn btn-info" role="button" href="meals"><spring:message code="meals.title"/></a>
                 <a class="btn btn-info" role="button" href="users"><spring:message code="users.title"/></a>
 
                 <a class="btn btn-primary" href="">
