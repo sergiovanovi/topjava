@@ -13,7 +13,7 @@
 <section>
     <h3><spring:message code="meals.title"/></h3>
 
-    <form class="form-horizontal" method="post" id="filter">
+    <form class="form-horizontal" id="filter">
 
         <div class="form-group">
             <label for="startDate" class="control-label col-xs-3"><spring:message code="meals.startDate"/></label>
@@ -53,7 +53,7 @@
 
         <div class="form-group">
             <div class="col-xs-offset-3 col-xs-9">
-                <button type="submit" class="btn btn-primary"><spring:message code="meals.filter"/></button>
+                <button type="button" class="btn btn-primary" onclick="updateTable()"><spring:message code="meals.filter"/></button>
             </div>
         </div>
     </form>
