@@ -32,5 +32,27 @@ $(function () {
             ]
         ]
     });
+
+    $('#filter').submit(function () {
+        filter();
+        return false;
+    });
+
     makeEditable();
 });
+
+function filter() {
+    var form = $('#filter');
+    $.ajax({
+        url: ajaxUrl + 'filter',
+        type: 'POST',
+        data: form.serialize(),
+        success: function (data) {
+            datatableApi.clear();
+            $.each(data, function (key, item) {
+                datatableApi.row.add(item);
+            });
+            datatableApi.draw();
+        }
+    });
+}
