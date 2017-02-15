@@ -1,7 +1,12 @@
 package ru.javawebinar.topjava.to;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 /**
@@ -9,20 +14,29 @@ import java.time.LocalDateTime;
  * 11.01.2015.
  */
 public class MealWithExceed {
-    private final Integer id;
+    private Integer id;
 
-    private final LocalDateTime dateTime;
+    @NotNull
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime dateTime;
 
-    private final String description;
+    @NotBlank
+    @Size(max = 64)
+    private String description;
 
-    private final int calories;
+    @NotNull
+    @Range(min = 10, max = 10000)
+    private Integer calories;
 
-    private final boolean exceed;
+    private boolean exceed;
+
+    public MealWithExceed() {
+    }
 
     public MealWithExceed(@JsonProperty("id") Integer id,
                           @JsonProperty("dateTime") LocalDateTime dateTime,
                           @JsonProperty("description") String description,
-                          @JsonProperty("calories") int calories,
+                          @JsonProperty("calories") Integer calories,
                           @JsonProperty("exceed") boolean exceed) {
         this.id = id;
         this.dateTime = dateTime;
@@ -43,12 +57,32 @@ public class MealWithExceed {
         return description;
     }
 
-    public int getCalories() {
+    public Integer getCalories() {
         return calories;
     }
 
     public boolean isExceed() {
         return exceed;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCalories(Integer calories) {
+        this.calories = calories;
+    }
+
+    public void setExceed(boolean exceed) {
+        this.exceed = exceed;
     }
 
     @Override
