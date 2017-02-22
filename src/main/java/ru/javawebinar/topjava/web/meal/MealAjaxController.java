@@ -10,6 +10,7 @@ import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.util.ValidationUtil;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -41,17 +42,16 @@ public class MealAjaxController extends AbstractMealController {
     }
 
     @PostMapping
-    public ResponseEntity<String> updateOrCreate(@Valid Meal meal, BindingResult result) {
+    public void updateOrCreate(@Valid Meal meal, BindingResult result) {
         // TODO change to exception handler
         if (result.hasErrors()) {
-            return ValidationUtil.getErrorResponse(result);
+            throw new ValidationException(ValidationUtil.getErrorResponse(result).getBody());
         }
         if (meal.isNew()) {
             super.create(meal);
         } else {
             super.update(meal, meal.getId());
         }
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
